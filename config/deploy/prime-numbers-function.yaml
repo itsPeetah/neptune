@@ -34,9 +34,9 @@ spec:
   selector:
     edgeautoscaler.polimi.it/function-name: "prime-numbers"
     edgeautoscaler.polimi.it/function-namespace: "openfaas-fn"
-  topologyKeys:
-    - "kubernetes.io/hostname"
-    - "*"
+  # topologyKeys:
+  #   - "kubernetes.io/hostname"
+  #   - "*"
 
 ---
 apiVersion: systemautoscaler.polimi.it/v1beta1
