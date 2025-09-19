@@ -1,7 +1,8 @@
-BUILD_SETTINGS = CGO_ENABLED=0 GOOS=linux GOARCH=amd64
-IMAGE = community-controller
-IMAGE_VERSION = $(shell git tag --points-at HEAD | sed '/$(IMAGE)\/.*/!s/.*//' | sed 's/\//:/')
-REPO = systemautoscaler
+BUILD_SETTINGS = CGO_ENABLED=0 GOOS=linux # GOARCH=amd64
+IMAGE = sa-community-controller
+# IMAGE_VERSION = $(shell git tag --points-at HEAD | sed '/$(IMAGE)\/.*/!s/.*//' | sed 's/\//:/')
+IMAGE_VERSION = $(IMAGE):dev
+REPO = itspeetah
 
 
 .PHONY: all build coverage clean e2e fmt release test vet

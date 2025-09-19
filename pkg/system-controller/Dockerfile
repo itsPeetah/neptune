@@ -2,6 +2,6 @@ FROM gcr.io/distroless/static:nonroot
 
 LABEL name="System Controller"
 
-COPY system-controller /usr/local/bin/
+COPY sa-system-controller /usr/local/bin/
 
-CMD ["system-controller"]
+CMD ["sa-system-controller"]

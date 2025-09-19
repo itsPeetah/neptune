@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	HttpMetricsImage   = "systemautoscaler/http-metrics"
+	HttpMetricsImage   = "itspeetah/sa-http-metrics"
 	HttpMetrics        = "http-metrics"
 	HttpMetricsVersion = "dev"
 	HttpMetricsPort    = 8080

@@ -9,4 +9,4 @@ kubectl apply -f config/permissions
 kubectl taint node k3d-edge-autoscaler-server-0 node-role.kubernetes.io/control-plane:NoSchedule-
 kubectl label nodes k3d-edge-autoscaler-server-0 node-role.kubernetes.io/master=true --overwrite
 
-kubectl apply -f config/deploy
+kubectl apply -f config/deploy-2
