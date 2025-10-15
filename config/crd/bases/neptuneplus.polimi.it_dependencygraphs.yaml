@@ -91,7 +91,7 @@ spec:
                             - functionNamespace
                           type: object
                         type: array
-                      nominalResponseTime:
+                      nominalLocalResponseTime:
                         anyOf:
                           - type: integer
                           - type: string
@@ -104,7 +104,7 @@ spec:
                       - functionName
                       - functionNamespace
                       - invocations
-                      - nominalResponseTime
+                      - nominalLocalResponseTime
                     type: object
                   type: array
               required:
