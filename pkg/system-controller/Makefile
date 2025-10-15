@@ -1,8 +1,7 @@
-BUILD_SETTINGS = CGO_ENABLED=0 GOOS=linux # GOARCH=amd64
-IMAGE = sa-system-controller
-# IMAGE_VERSION = $(shell git tag --points-at HEAD | sed '/$(IMAGE)\/.*/!s/.*//' | sed 's/\//:/')
-IMAGE_VERSION = $(IMAGE):dev
-REPO = itspeetah
+BUILD_SETTINGS = CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+IMAGE = system-controller
+IMAGE_VERSION = $(shell git tag --points-at HEAD | sed '/$(IMAGE)\/.*/!s/.*//' | sed 's/\//:/')
+REPO = systemautoscaler
 
 
 .PHONY: all build coverage clean e2e fmt release test vet
@@ -27,8 +26,8 @@ coverage: test
 release: build
 	@if [ -n "$(IMAGE_VERSION)" ]; then \
 		echo "Building $(IMAGE_VERSION)" ;\
-		docker build --rm -t $(REPO)/$(IMAGE_VERSION) . ;\
-		docker push $(REPO)/$(IMAGE_VERSION) ;\
+		docker build --rm -t $(REPO)/$(IMAGE):$(IMAGE_VERSION) . ;\
+		docker push $(REPO)/$(IMAGE):$(IMAGE_VERSION) ;\
 	else \
 		echo "$(IMAGE) unchanged: no version tag on HEAD commit" ;\
 	fi
