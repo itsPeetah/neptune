@@ -26,7 +26,7 @@ import (
 const (
 	HttpMetricsImage   = "itspeetah/sa-http-metrics"
 	HttpMetrics        = "http-metrics"
-	HttpMetricsVersion = "dev"
+	HttpMetricsVersion = "fix"
 	HttpMetricsPort    = 8080
 	HttpMetricsCpu     = 100
 	HttpMetricsMemory  = 200000000
