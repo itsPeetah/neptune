@@ -2,7 +2,9 @@ package informers
 
 import (
 	sainformers "github.com/lterrac/edge-autoscaler/pkg/generated/informers/externalversions/edgeautoscaler/v1alpha1"
+	npinformers "github.com/lterrac/edge-autoscaler/pkg/generated/informers/externalversions/neptuneplus/v1alpha1"
 	salisters "github.com/lterrac/edge-autoscaler/pkg/generated/listers/edgeautoscaler/v1alpha1"
+	nplisters "github.com/lterrac/edge-autoscaler/pkg/generated/listers/neptuneplus/v1alpha1"
 	openfaasinformers "github.com/openfaas/faas-netes/pkg/client/informers/externalversions/openfaas/v1"
 	openfaaslisters "github.com/openfaas/faas-netes/pkg/client/listers/openfaas/v1"
 	appsinformers "k8s.io/client-go/informers/apps/v1"
@@ -19,6 +21,7 @@ type Informers struct {
 	CommunityConfiguration sainformers.CommunityConfigurationInformer
 	CommunitySchedule      sainformers.CommunityScheduleInformer
 	Function               openfaasinformers.FunctionInformer
+	DependencyGraph        npinformers.DependencyGraphInformer
 }
 
 func (i *Informers) GetListers() Listers {
@@ -30,6 +33,7 @@ func (i *Informers) GetListers() Listers {
 		i.CommunityConfiguration.Lister(),
 		i.CommunitySchedule.Lister(),
 		i.Function.Lister(),
+		i.DependencyGraph.Lister(),
 	}
 }
 
@@ -41,4 +45,5 @@ type Listers struct {
 	salisters.CommunityConfigurationLister
 	salisters.CommunityScheduleLister
 	openfaaslisters.FunctionLister
+	nplisters.DependencyGraphLister
 }

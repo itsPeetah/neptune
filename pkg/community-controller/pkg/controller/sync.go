@@ -220,6 +220,15 @@ func (c *CommunityController) sync(cs *v1alpha1.CommunitySchedule, pods []*corev
 			klog.Errorf("can not retrieve function %s/%s, with error %v", fNamespace, fName, err)
 			return err
 		}
+
+		depStrinVar, err := c.GetFunctionDependency(function)
+		if err != nil {
+			// Ignoring the error for now because edge-autoscaler doesn't have SLAs
+			// Maybe I can add the dependencyAware tag to function crd?
+			klog.Errorf("an error occurred while retrieving the dependency DAG for function %s/%s. The function will be treated as not dependency aware. %v", fNamespace, fName, err)
+			// return err
+		}
+
 		for nodeName, ok := range nodes {
 			if ok {
 				if _, ok := podsMap[fKey][nodeName]; ok {
@@ -241,10 +250,10 @@ func (c *CommunityController) sync(cs *v1alpha1.CommunitySchedule, pods []*corev
 
 				var pod *corev1.Pod
 				if _, ok := function.Labels[ealabels.GpuFunctionLabel]; ok && gpu {
-					pod = newGPUPod(function, cs, node)
+					pod = newGPUPod(function, cs, node, depStrinVar)
 
 				} else {
-					pod = newCPUPod(function, cs, node)
+					pod = newCPUPod(function, cs, node, depStrinVar)
 				}
 
 				if _, ok := createMap[fKey]; !ok {
@@ -339,7 +348,7 @@ func (c *CommunityController) sync(cs *v1alpha1.CommunitySchedule, pods []*corev
 // newCPUPod creates a new Pod for a Function resource. It also sets
 // the appropriate OwnerReferences on the resource so handleObject can discover
 // the Function resource that 'owns' it.
-func newCPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, node *corev1.Node) *corev1.Pod {
+func newCPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, node *corev1.Node, dependencyEnvVar *corev1.EnvVar) *corev1.Pod {
 
 	envVars := makeEnvVars(function)
 
@@ -437,6 +446,10 @@ func newCPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, no
 							Name:  "GPU",
 							Value: "false",
 						},
+						{
+							Name:  dependencyEnvVar.Name,
+							Value: dependencyEnvVar.Value,
+						},
 					},
 					Resources: corev1.ResourceRequirements{
 						Limits: map[corev1.ResourceName]resource.Quantity{
@@ -487,7 +500,7 @@ func newCPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, no
 // the appropriate OwnerReferences on the resource so handleObject can discover
 // the Function resource that 'owns' it.
 // the bool is used to handle pod replicas running on CPU
-func newGPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, node *corev1.Node) *corev1.Pod {
+func newGPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, node *corev1.Node, dependencyEnvVar *corev1.EnvVar) *corev1.Pod {
 
 	envVars := makeEnvVars(function)
 
@@ -627,6 +640,10 @@ func newGPUPod(function *openfaasv1.Function, cs *v1alpha1.CommunitySchedule, no
 						{
 							Name:  "GPU",
 							Value: "true",
+						},
+						{
+							Name:  dependencyEnvVar.Name,
+							Value: dependencyEnvVar.Value,
 						},
 					},
 					Resources: corev1.ResourceRequirements{

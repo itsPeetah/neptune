@@ -10,6 +10,7 @@ import (
 	versioned "github.com/lterrac/edge-autoscaler/pkg/generated/clientset/versioned"
 	edgeautoscaler "github.com/lterrac/edge-autoscaler/pkg/generated/informers/externalversions/edgeautoscaler"
 	internalinterfaces "github.com/lterrac/edge-autoscaler/pkg/generated/informers/externalversions/internalinterfaces"
+	neptuneplus "github.com/lterrac/edge-autoscaler/pkg/generated/informers/externalversions/neptuneplus"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
@@ -157,8 +158,13 @@ type SharedInformerFactory interface {
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
 	Edgeautoscaler() edgeautoscaler.Interface
+	Neptuneplus() neptuneplus.Interface
 }
 
 func (f *sharedInformerFactory) Edgeautoscaler() edgeautoscaler.Interface {
 	return edgeautoscaler.New(f, f.namespace, f.tweakListOptions)
+}
+
+func (f *sharedInformerFactory) Neptuneplus() neptuneplus.Interface {
+	return neptuneplus.New(f, f.namespace, f.tweakListOptions)
 }

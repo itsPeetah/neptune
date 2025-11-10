@@ -6,6 +6,8 @@ import (
 	clientset "github.com/lterrac/edge-autoscaler/pkg/generated/clientset/versioned"
 	edgeautoscalerv1alpha1 "github.com/lterrac/edge-autoscaler/pkg/generated/clientset/versioned/typed/edgeautoscaler/v1alpha1"
 	fakeedgeautoscalerv1alpha1 "github.com/lterrac/edge-autoscaler/pkg/generated/clientset/versioned/typed/edgeautoscaler/v1alpha1/fake"
+	neptuneplusv1alpha1 "github.com/lterrac/edge-autoscaler/pkg/generated/clientset/versioned/typed/neptuneplus/v1alpha1"
+	fakeneptuneplusv1alpha1 "github.com/lterrac/edge-autoscaler/pkg/generated/clientset/versioned/typed/neptuneplus/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -63,4 +65,9 @@ var _ clientset.Interface = &Clientset{}
 // EdgeautoscalerV1alpha1 retrieves the EdgeautoscalerV1alpha1Client
 func (c *Clientset) EdgeautoscalerV1alpha1() edgeautoscalerv1alpha1.EdgeautoscalerV1alpha1Interface {
 	return &fakeedgeautoscalerv1alpha1.FakeEdgeautoscalerV1alpha1{Fake: &c.Fake}
+}
+
+// NeptuneplusV1alpha1 retrieves the NeptuneplusV1alpha1Client
+func (c *Clientset) NeptuneplusV1alpha1() neptuneplusv1alpha1.NeptuneplusV1alpha1Interface {
+	return &fakeneptuneplusv1alpha1.FakeNeptuneplusV1alpha1{Fake: &c.Fake}
 }
